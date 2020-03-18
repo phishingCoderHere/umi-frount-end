@@ -3,7 +3,7 @@ import { Effect } from 'dva';
 import { stringify } from 'querystring';
 import { router } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { authentication, getSession } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 
@@ -34,13 +34,14 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
+      yield call(authentication, payload)
+      // 执行异步函数 => 发出一个action，类似dispatch
+      const response = yield call(getSession, payload)
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
-      // Login successfully
-      if (response.status === 'ok') {
+      if (response.authorities) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
