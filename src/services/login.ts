@@ -35,7 +35,7 @@ export async function authentication(params: AuthParamsType) {
 
 // 获取session
 export async function getSession() {
-  return request('api/account', {
+  return request('/api/account', {
     method: 'get',
   });
 }
