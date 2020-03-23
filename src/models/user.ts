@@ -5,7 +5,7 @@ import { queryCurrent, query as queryUsers } from '@/services/user';
 
 export interface CurrentUser {
   avatar?: string;
-  name?: string;
+  login?: string;
   title?: string;
   group?: string;
   signature?: string;
@@ -13,7 +13,7 @@ export interface CurrentUser {
     key: string;
     label: string;
   }[];
-  userid?: string;
+  id?: string;
   unreadCount?: number;
 }
 

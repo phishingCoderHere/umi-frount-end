@@ -37,6 +37,7 @@ const Model: LoginModelType = {
       yield call(authentication, payload)
       // 执行异步函数 => 发出一个action，类似dispatch
       const response = yield call(getSession, payload)
+      response.currentAuthority = response.authorities
       yield put({
         type: 'changeLoginStatus',
         payload: response,
