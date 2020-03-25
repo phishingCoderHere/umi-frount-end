@@ -3,6 +3,8 @@ import { Form, Button, DatePicker, Input, Modal, Radio, Select, Steps } from 'an
 
 import { TableListItem } from '../data.d';
 
+import { getRoles } from '../service'
+
 export interface FormValueType extends Partial<TableListItem> {
   target?: string;
   template?: string;
@@ -32,6 +34,11 @@ const formLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 13 },
 };
+
+let roleData: any[] = [];
+getRoles().then(resp => {
+  roleData = resp;
+})
 
 const UpdateForm: React.FC<UpdateFormProps> = props => {
   const [formVals, setFormVals] = useState<FormValueType>({
@@ -76,23 +83,16 @@ const UpdateForm: React.FC<UpdateFormProps> = props => {
     if (currentStep === 1) {
       return (
         <>
-          <FormItem name="target" label="监控对象">
-            <Select style={{ width: '100%' }}>
-              <Option value="0">表一</Option>
-              <Option value="1">表二</Option>
+          <FormItem name="target" label="角色">
+            <Select style={{ width: '100%' }}
+              mode="multiple"
+              placeholder="请选择角色"
+              defaultValue={['admin']}>
+              {roleData.map(role => (<Option key={role} value={role} >role</Option>))}
             </Select>
           </FormItem>
-          <FormItem name="template" label="规则模板">
-            <Select style={{ width: '100%' }}>
-              <Option value="0">规则模板一</Option>
-              <Option value="1">规则模板二</Option>
-            </Select>
-          </FormItem>
-          <FormItem name="type" label="规则类型">
-            <RadioGroup>
-              <Radio value="0">强</Radio>
-              <Radio value="1">弱</Radio>
-            </RadioGroup>
+          <FormItem name="template" label="电子邮箱">
+            <Input placeholder="请输入电子邮箱" />
           </FormItem>
         </>
       );
@@ -189,24 +189,34 @@ const UpdateForm: React.FC<UpdateFormProps> = props => {
       onCancel={() => handleUpdateModalVisible(false, values)}
       afterClose={() => handleUpdateModalVisible()}
     >
-      <Steps style={{ marginBottom: 28 }} size="small" current={currentStep}>
+      {/* <Steps style={{ marginBottom: 28 }} size="small" current={currentStep}>
         <Step title="基本信息" />
         <Step title="配置规则属性" />
         <Step title="设定调度周期" />
-      </Steps>
+      </Steps> */}
       <Form
         {...formLayout}
         form={form}
-        initialValues={{
-          target: formVals.target,
-          template: formVals.template,
-          type: formVals.type,
-          frequency: formVals.frequency,
-          name: formVals.name,
-          desc: formVals.desc,
-        }}
+      // initialValues={{
+      //   target: formVals.target,
+      //   template: formVals.template,
+      //   type: formVals.type,
+      //   frequency: formVals.frequency,
+      //   name: formVals.name,
+      //   desc: formVals.desc,
+      // }}
       >
-        {renderContent()}
+        <FormItem name="target" label="角色">
+          <Select style={{ width: '100%' }}
+            mode="multiple"
+            placeholder="请选择角色"
+            defaultValue={['admin']}>
+            {roleData.map(role => (<Option key={role} value={role} >{role}</Option>))}
+          </Select>
+        </FormItem>
+        <FormItem name="template" label="电子邮箱">
+          <Input placeholder="请输入电子邮箱" />
+        </FormItem>
       </Form>
     </Modal>
   );
