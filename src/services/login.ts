@@ -22,14 +22,9 @@ export async function fakeAccountLogin(params: LoginParamsType) {
 
 // spring 框架鉴权
 export async function authentication(params: AuthParamsType) {
-  console.log('read(\'XSRF - TOKEN\')', read('XSRF-TOKEN'));
   return request('/api/authentication', {
     method: 'POST',
-    params,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'X-XSRF-TOKEN': read('XSRF-TOKEN')
-    }
+    params
   });
 }
 

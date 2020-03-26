@@ -8,7 +8,7 @@ import { SorterResult } from 'antd/es/table/interface';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryRule, updateUser, addRule, removeRule } from './service';
 
 /**
  * 添加节点
@@ -35,13 +35,8 @@ const handleAdd = async (fields: TableListItem) => {
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('正在配置');
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
+    await updateUser(fields);
     hide();
-
     message.success('配置成功');
     return true;
   } catch (error) {
@@ -102,6 +97,14 @@ const TableList: React.FC<{}> = () => {
       title: '创建时间',
       dataIndex: 'createdDate',
       key: 'createdDate',
+      // sorter: true,
+      // hideInForm: true,
+      // renderText: (val: string) => `${val} 万`,
+    },
+    {
+      title: '电子邮件',
+      dataIndex: 'email',
+      key: 'email',
       // sorter: true,
       // hideInForm: true,
       // renderText: (val: string) => `${val} 万`,

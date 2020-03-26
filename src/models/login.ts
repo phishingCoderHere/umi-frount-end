@@ -4,8 +4,9 @@ import { stringify } from 'querystring';
 import { router } from 'umi';
 
 import { authentication, getSession } from '@/services/login';
+import { refreshToken } from '@/utils/request';
 import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import { getPageQuery } from '@/utils/utils'
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -34,9 +35,11 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
+      refreshToken()
       yield call(authentication, payload)
       // 执行异步函数 => 发出一个action，类似dispatch
       const response = yield call(getSession, payload)
+      refreshToken()
       response.currentAuthority = response.authorities
       yield put({
         type: 'changeLoginStatus',

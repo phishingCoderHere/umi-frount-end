@@ -36,9 +36,9 @@ export async function addRule(params: TableListItem) {
   });
 }
 
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
+export async function updateUser(params: TableListParams) {
+  return request('/api/users', {
+    method: 'PUT',
     data: {
       ...params,
       method: 'update',

@@ -4,6 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
+import { read } from '@/utils/cookie-utils';
 import IConfig from '../../config/config';
 
 const codeMessage = {
@@ -55,4 +56,17 @@ const request = extend({
   prefix: IConfig.define.BASEURL ? IConfig.define.BASEURL : ''
 });
 
+/**
+ * 刷新请求参数中的TOKEN
+ */
+export function refreshToken() {
+  /**
+   *  动态修改默认参数
+   * */
+  request.extendOptions({
+    headers: {
+      'X-XSRF-TOKEN': read('XSRF-TOKEN')
+    },
+  })
+}
 export default request;
