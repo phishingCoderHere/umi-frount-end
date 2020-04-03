@@ -4,9 +4,9 @@ import { stringify } from 'querystring';
 import { router } from 'umi';
 
 import { authentication, getSession } from '@/services/login';
-import { refreshToken } from '@/utils/request';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils'
+import { setToken } from '@/utils/request.ts'
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -35,17 +35,28 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      refreshToken()
-      yield call(authentication, payload)
+      // refreshToken()
+      const authResp = yield call(authentication, payload)
+      console.log('authResp', authResp);
+      const bearerToken = `Bearer ${authResp.id_token}`
+      if (!authResp.id_token) {
+        return;
+      }
+      setToken(bearerToken)
+      // if (rememberMe) {
+      //   Storage.local.set(AUTH_TOKEN_KEY, jwt);
+      // } else {
+      //   Storage.session.set(AUTH_TOKEN_KEY, jwt);
+      // }
       // 执行异步函数 => 发出一个action，类似dispatch
       const response = yield call(getSession, payload)
-      refreshToken()
-      response.currentAuthority = response.authorities
+      // refreshToken()
+      response.currentAuthority = response.roleLists
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
-      if (response.authorities) {
+      if (response.roleLists) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };

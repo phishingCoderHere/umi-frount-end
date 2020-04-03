@@ -1,5 +1,4 @@
 import request from '@/utils/request';
-import { read } from '@/utils/cookie-utils';
 
 export interface LoginParamsType {
   userName: string;
@@ -22,9 +21,9 @@ export async function fakeAccountLogin(params: LoginParamsType) {
 
 // spring 框架鉴权
 export async function authentication(params: AuthParamsType) {
-  return request('/api/authentication', {
+  return request('/api/authenticate', {
     method: 'POST',
-    params
+    data: params
   });
 }
 

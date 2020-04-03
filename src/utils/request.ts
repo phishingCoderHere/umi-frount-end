@@ -59,13 +59,13 @@ const request = extend({
 /**
  * 刷新请求参数中的TOKEN
  */
-export function refreshToken() {
+export function setToken(token: string) {
   /**
    *  动态修改默认参数
    * */
   request.extendOptions({
     headers: {
-      'X-XSRF-TOKEN': read('XSRF-TOKEN')
+      'Authorization': token
     },
   })
 }
