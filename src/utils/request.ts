@@ -4,7 +4,6 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import { read } from '@/utils/cookie-utils';
 import IConfig from '../../config/config';
 
 const codeMessage = {
